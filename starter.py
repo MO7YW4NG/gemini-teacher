@@ -33,7 +33,7 @@ import dotenv
 dotenv.load_dotenv()
 
 if sys.version_info < (3, 11, 0):
-    raise Exception("Python 3.11 为最低要求.")
+    raise Exception("Python 3.11 為最低要求.")
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -56,10 +56,10 @@ voice_voice_id = "nPczCjzI2devNBz1zQrb"
 
 console = Console()
 if voice_api_key:
-    console.print("启动语音模式",style="green")
+    console.print("啟動語音模式",style="green")
     voice_client = ElevenLabs(api_key=voice_api_key)
 else: 
-    console.print("语音模式关闭，找不到 ELEVENLABS_API_KEY",style="red")
+    console.print("語音模式關閉，找不到 ELEVENLABS_API_KEY",style="red")
 class AudioLoop:
     def __init__(self):
         self.ws: Connection
@@ -86,7 +86,7 @@ class AudioLoop:
                     {
                         "role": "user",
                         "parts": [{
-                            "text": "你是一名专业的英语口语指导老师，你需要帮助用户纠正语法发音，用户将会说一句英文，然后你会给出识别出来的英语是什么，并且告诉他发音中有什么问题，语法有什么错误，并且一步一步的纠正他的发音，当一次发音正确后，根据当前语句提出下一个场景的语句,然后一直循环这个过程，直到用户说OK，我要退出。你的回答永远要保持中文。如果明白了请回答OK两个字"
+                            "text": "你是一名專業的英語口語指導老師，你需要幫助用戶糾正語法發音，用戶將會說一句英文，然後你會給出識別出來的英語是什麼，並且告訴他發音中有什麼問題，語法有什麼錯誤，並且一步一步地糾正他的發音，當一次發音正確後，根據當前語句提出下一個場景的語句，然後一直循環這個過程，直到用戶說OK，我要退出。你的回答永遠要保持中文。如果明白了請回答OK兩個字"
                         }]
                     }
                 ],
@@ -96,7 +96,7 @@ class AudioLoop:
         await self.ws.send(json.dumps(initial_msg))
         current_response = []
         async for raw_response in self.ws:
-            response = json.loads(raw_response.decode("utf-8"))  # 使用 UTF-8 解码
+            response = json.loads(raw_response.decode("utf-8"))  # 使用 UTF-8 解碼
 
             try:
                 if "serverContent" in response:
@@ -131,12 +131,12 @@ class AudioLoop:
         )
         
         console = Console()
-        console.print("🎤 说一句英语吧！比如: What is blockchain?",style="yellow")
+        console.print("🎤 說一句英語吧！比如: What is blockchain?",style="yellow")
 
         while True:
             data = await asyncio.to_thread(stream.read, CHUNK_SIZE)
-            # 计算音量 - 使用简单的字节平均值
-            # 每个采样是2字节（16位），所以每次取2个字节转换为整数
+            # 計算音量 - 使用簡單的字節平均值
+            # 每個採樣是2字節（16位），所以每次取2個字節轉換為整數
             if self.running_step > 1:
               continue
             audio_data = []
@@ -144,7 +144,7 @@ class AudioLoop:
                 sample = int.from_bytes(data[i:i+2], byteorder='little', signed=True)
                 audio_data.append(abs(sample))
             volume = sum(audio_data) / len(audio_data)
-            if volume > 200:  # 阈值可以根据需要调整
+            if volume > 200:  # 閾值可以根據需要調整
                 if self.running_step == 0:
                     console.print("🎤 :",style="yellow",end="")
                     self.running_step += 1
@@ -169,7 +169,7 @@ class AudioLoop:
         current_response = []  
         async for raw_response in self.ws:
             if self.running_step == 1:
-                console.print("\n♻️ 处理中：",end="")
+                console.print("\n♻️ 處理中：",end="")
                 self.running_step += 1
             response = json.loads(raw_response.decode("utf-8"))  
 
@@ -205,9 +205,9 @@ class AudioLoop:
                                     enable_logging=True
                                 )
                                 play(voice_stream)
-                            console.print("🙎 声音构建中........",style="yellow")
+                            console.print("🙎 聲音構建中........",style="yellow")
                             await asyncio.to_thread(play_audio)
-                            console.print("🙎 播放完毕",style="green")
+                            console.print("🙎 播放完畢",style="green")
                         self.running_step = 0
 
     async def run(self):
@@ -217,7 +217,7 @@ class AudioLoop:
         ) as ws:
             self.ws = ws
             console = Console()
-            console.print("Gemini 英语口语助手",style="green",highlight=True)
+            console.print("Gemini 英語口語助手",style="green",highlight=True)
             console.print("Make by twitter: @BoxMrChen",style="blue")
             console.print("============================================",style="yellow")
             await self.startup()
